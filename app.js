@@ -1,23 +1,16 @@
 const express = require('express');
 const app = express();
-const mysql = require('mysql');
 
+const mysql = require('mysql');         //MySQL Driver, used to connect NodeJS with MySQL 
 
-var mysqlConnection = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',    
-    database: 'ccart',
-    multipleStatements: true
-});
+//Initialise Database 
+var db = require('./config/db')
 
-mysqlConnection.connect((err) => {
-    if (!err)
-        console.log('DB Connection Established');
-    else
-        console.log('db Connection Failed!' + JSON.stringify(err, undefined, 2));
-});
+// Middleware added to read JSON from Request Body.
+app.use(express.json())
 
-app.use('/',(req,res,next)=>{
+app.use('/api/auth', require('./controllers/Auth/AuthAPI'))
+app.use('/', (req, res, next) => {
     res.end("Welcome to the Ccart Server");
 })
 
